@@ -8,9 +8,11 @@ The objective of the project is to create an eCommerce application that initiall
 - Docker
 ## Practices
 ### Clean architecture
-  ![image](https://github.com/Gospon/Upsell/assets/103904530/b33f6f35-6753-42f9-a5eb-cd205e656d6e)
+  ![image](https://github.com/Gospon/Upsell/assets/103904530/52c7b2d2-0c76-49db-94e9-2cc1aba64813)
+
   - Infrastructure and Persistence are separated:
-   ![image](https://github.com/Gospon/Upsell/assets/103904530/495f4712-ea98-42c8-bc86-500ca3bce202)
+   ![image](https://github.com/Gospon/Upsell/assets/103904530/3ad95714-dc2d-49df-a888-182a66bd438b)
+
 
 ### Modular monolith (Currently)
   - Each module is implemented as a Class Library, representing a single bounded context
@@ -20,22 +22,22 @@ The objective of the project is to create an eCommerce application that initiall
   - All services and dependencies are registered in the Program.cs file.
   - All data is stored in one database but each module has its own persistence
     
-  ![image](https://github.com/Gospon/Upsell/assets/103904530/1649b6c0-08a7-4e6c-8836-1d7b0de2cfea)
+ ![image](https://github.com/Gospon/Upsell/assets/103904530/45cc896a-4668-4974-831a-56bf4ceb44c3)
+
 
 ### Communication between Bounded Contexts (RabbitMQ)
 -  docker run -d  --hostname rmq --name rabbit-server -p 8080:15672 -p 5672:5672 rabbitmq:3-management
 
-![image](https://github.com/Gospon/Upsell/assets/103904530/657800e0-064c-410a-b1c8-50351ee418a8)
+![image](https://github.com/Gospon/Upsell/assets/103904530/fe874b81-5d7f-4b27-900f-109b29796989)
 
 ### CQRS & Mediator
-  ![image](https://github.com/Gospon/Upsell/assets/103904530/b6a0204d-b476-4642-9a08-1b78faf67f60)
+  ![image](https://github.com/Gospon/Upsell/assets/103904530/75775506-80b3-4df7-b176-7b8c8447f774)
+
   - Controllers are located in API layer
   - Repositories not implemented yet
 
 ### Authentication / Authorization 
   - JwtToken (Currenlty)
-  
-  <img src="https://github.com/Gospon/Upsell/assets/103904530/35ecb1b7-0fe7-41df-a34f-c9e60cae8157" width="45%"/>
-  &nbsp; &nbsp; &nbsp; &nbsp;
-  <img src="https://github.com/Gospon/Upsell/assets/103904530/97883bfb-7f34-480f-9e3e-4333a1eb369c" width="48%"/>
-![image](https://github.com/Gospon/Upsell/assets/103904530/be873067-33e7-40b8-9b6e-ad6b98b62587)
+    
+  ![image](https://github.com/Gospon/Upsell/assets/103904530/56497715-8eda-4cbe-af06-a118b8b4284e)
+
