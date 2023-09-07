@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Product.Application.Commands;
+using Product.Application.Queries;
 
 namespace Identity.API.Controllers
 {
@@ -15,15 +17,29 @@ namespace Identity.API.Controllers
         }
 
         [HttpGet("product")]
-        public async Task<ActionResult<string>> GetProducts()
+        public async Task<ActionResult> GetProducts()
         {
-            return Ok();
+            return Ok(_mediator.Send(new GetProductsQuery()));
         }
 
         [HttpPost("product")]
-        public async Task<ActionResult<string>> AddProduct(Product.Domain.Entities.Product product)
+        public async Task<ActionResult> AddProduct(AddProductCommand request)
         {
-            return Ok();
+            return Ok(await _mediator.Send(request));
+        }
+
+        [HttpPut("products/{productId}")]
+        public async Task<ActionResult> UpdateProduct(UpdateProductCommand request)
+        {
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+
+        [HttpDelete("products/{productId}")]
+        public async Task<ActionResult> DeleteProduct(DeleteProductCommand request)
+        {
+            var result = await _mediator.Send(request);
+            return Ok(result);
         }
     }
 }

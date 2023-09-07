@@ -7,6 +7,8 @@ namespace Product.Application.Interfaces
     {
         DbSet<Category> Category { get; }
 
+        DbSet<Domain.Entities.Product> Product { get; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

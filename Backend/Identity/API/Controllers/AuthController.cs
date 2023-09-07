@@ -16,13 +16,13 @@ namespace Identity.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<string>> Register(RegisterUserCommand command)
+        public async Task<ActionResult> Register(RegisterUserCommand command)
         {
             return Ok(await _mediator.Send(command));
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(LoginUserCommand request)
+        public async Task<ActionResult> Login(LoginUserCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
