@@ -41,3 +41,6 @@ The objective of the project is to create an eCommerce application that initiall
     
   ![image](https://github.com/Gospon/Upsell/assets/103904530/56497715-8eda-4cbe-af06-a118b8b4284e)
 
+### Redux
+![image](https://github.com/Gospon/Upsell/assets/103904530/6b84f8be-719e-4748-938d-621ae2397e58)
+
