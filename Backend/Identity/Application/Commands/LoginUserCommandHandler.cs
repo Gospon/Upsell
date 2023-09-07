@@ -1,32 +1,30 @@
-﻿using Identity.Application.DTO;
-using Identity.Application.Interfaces;
-using Identity.Persistence;
+﻿using Identity.Application.Interfaces;
 using MediatR;
 using SharedKernel.Types;
 
 namespace Identity.Application.Commands;
 
-public record LoginUserCommand(UserDTO user) : IRequest<Response<string>>;
+public record LoginUserCommand(string Email, string Password) : IRequest<Response<string>>;
 public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Response<string>>
 {
-    private readonly IdentityDbContext _identityDbContext;
+    private readonly IIdentityDbContext _context;
     private readonly IJwtService _jwtService;
-    public LoginUserCommandHandler(IdentityDbContext identityDbContext, IJwtService jwtService)
+    public LoginUserCommandHandler(IIdentityDbContext context, IJwtService jwtService)
     {
-        _identityDbContext = identityDbContext;
+        _context = context;
         _jwtService = jwtService;
     }
     public async Task<Response<string>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        var user = _identityDbContext.IdentityUser.FirstOrDefault(u => u.Email == request.user.Email);
+        var user = _context.IdentityUser.FirstOrDefault(u => u.Email == request.Email);
         if (user is not null)
         {
-            var passwordMatch = BCrypt.Net.BCrypt.Verify(request.user.Password, user.PasswordHash);
+            var passwordMatch = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
 
 
             if (passwordMatch)
             {
-                var jwtToken = _jwtService.GetToken(request.user);
+                var jwtToken = _jwtService.GetToken(request.Email);
                 return new Response<string>() { Success = true, Data = jwtToken };
             }
         }

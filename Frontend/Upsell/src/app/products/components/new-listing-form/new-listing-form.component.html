@@ -1,0 +1,61 @@
+<form [formGroup]="productForm" (ngSubmit)="submitListing()">
+  <div class="add-listing-container">
+    <span class="p-float-label">
+      <input pInputText id="title" formControlName="title" />
+      <label for="title">Title</label>
+    </span>
+    <div class="p-field">
+      <span class="p-float-label">
+        <textarea
+          id="description"
+          pInputTextarea
+          formControlName="description"
+        ></textarea>
+        <label for="description">Description</label>
+      </span>
+    </div>
+    <div class="dropdowns">
+      <div class="p-field">
+        <p-dropdown
+          [options]="categoriesForDropdown"
+          formControlName="category"
+          [filter]="true"
+          placeholder="Category"
+          [style]="{ minWidth: '100%' }"
+          appendTo="body"
+        ></p-dropdown>
+      </div>
+      <div class="p-field">
+        <p-dropdown
+          [options]="conditions"
+          formControlName="condition"
+          placeholder="Condition"
+          [style]="{ minWidth: '100%' }"
+        ></p-dropdown>
+      </div>
+    </div>
+    <div class="input-upload-container">
+      <p-fileUpload
+        #fileUpload
+        [multiple]="true"
+        accept="image/*"
+        mode="basic"
+        [customUpload]="true"
+        (uploadHandler)="onImageUpload($event)"
+      ></p-fileUpload>
+      <div class="p-inputgroup">
+        <span class="p-inputgroup-addon" (click)="toggleCurrency()">{{
+          currencySymbol
+        }}</span>
+        <input
+          id="price"
+          pInputText
+          formControlName="price"
+          placeholder="Price"
+        />
+        <span class="p-inputgroup-addon">{{ currency }}</span>
+      </div>
+    </div>
+  </div>
+  <button type="submit" pButton label="Submit" class="submit-button"></button>
+</form>

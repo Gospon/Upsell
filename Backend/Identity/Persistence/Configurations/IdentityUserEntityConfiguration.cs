@@ -1,4 +1,4 @@
-﻿using Identity.Persistence.EDMs;
+﻿using Identity.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

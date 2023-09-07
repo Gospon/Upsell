@@ -1,0 +1,25 @@
+<div class="dialog">
+  <p-dialog
+    header="Add New Listing"
+    [(visible)]="visible"
+    [resizable]="false"
+    [draggable]="false"
+    [modal]="true"
+    (onHide)="hideDialog()"
+  >
+    <new-listing-form [categories]="categories"></new-listing-form>
+  </p-dialog>
+</div>
+
+<div class="dialog">
+  <p-dialog
+    header="Authenticate"
+    [(visible)]="authenticate"
+    [resizable]="false"
+    [draggable]="false"
+    [modal]="true"
+    (onHide)="hideDialog()"
+  >
+    <authentication-form></authentication-form>
+  </p-dialog>
+</div>

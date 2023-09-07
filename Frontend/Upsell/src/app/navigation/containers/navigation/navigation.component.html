@@ -1,0 +1,55 @@
+<div class="navigation-container">
+  <div class="navigation">
+    <div class="logo">
+      <img src="../assets/icons/Upsell.svg" alt="" />
+    </div>
+    <div class="search-bar">
+      <input type="text" class="search-bar-input" placeholder="Search..." />
+      <div class="magnifier-container">
+        <img
+          class="magnifier-icon"
+          src="../assets/icons/Magnifier.svg"
+          alt=""
+        />
+      </div>
+    </div>
+    <div class="right-navigation">
+      <div class="add-new-listing">
+        <button
+          class="add-new-listing-button"
+          (click)="handleAddNewListingClick()"
+        >
+          Add new listing
+        </button>
+      </div>
+      <button class="account-menu">
+        <img class="menu-icon" src="../assets/icons/Menu.svg" alt="" />
+        <img class="account-icon" src="../assets/icons/Account.svg" alt="" />
+      </button>
+    </div>
+  </div>
+  <ng-container *ngIf="currentCategories$ | async as categories">
+    <div class="carousel">
+      <p-carousel
+        #carousel
+        [value]="categories"
+        [numVisible]="categories.length < 5 ? categories.length : 5"
+        [numScroll]="3"
+        [circular]="false"
+        [showIndicators]="false"
+      >
+        <ng-template let-category pTemplate="item">
+          <div class="carousel-item">
+            <div
+              class="carousel-icon"
+              [innerHTML]="sanitizeSVG(category.image)"
+              [ngClass]="{ 'carousel-icon-focused': categoryFocused(category) }"
+              (click)="handleCategoryClicked(carousel, category)"
+            ></div>
+            <p class="carousel-label">{{ category.name }}</p>
+          </div>
+        </ng-template>
+      </p-carousel>
+    </div>
+  </ng-container>
+</div>

@@ -16,7 +16,7 @@ public class AuditableEntitiesInterceptor : SaveChangesInterceptor
             return base.SavingChangesAsync(eventData, result, cancellationToken);
         }
 
-        var entries = eventData.Context.ChangeTracker.Entries<IAuditableEntity>();
+        var entries = eventData.Context.ChangeTracker.Entries<AuditableEntity>();
 
         foreach (var entry in entries)
         {

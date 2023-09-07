@@ -1,0 +1,65 @@
+<div class="auth-container">
+  <form [formGroup]="authenticationForm" (ngSubmit)="onSubmit()" class="form">
+    <div class="p-field" *ngIf="isRegistering">
+      <span class="p-float-label">
+        <input
+          pInputText
+          type="text"
+          id="firstName"
+          formControlName="firstName"
+          style="width: 100%"
+        />
+        <label for="firstName">First Name</label>
+      </span>
+    </div>
+    <div class="p-field" *ngIf="isRegistering">
+      <span class="p-float-label">
+        <input
+          pInputText
+          type="text"
+          id="lastName"
+          formControlName="lastName"
+          style="width: 100%"
+        />
+        <label for="lastName">Last Name</label>
+      </span>
+    </div>
+    <div class="p-field">
+      <span class="p-float-label">
+        <input
+          pInputText
+          type="email"
+          id="email"
+          formControlName="email"
+          style="width: 100%"
+        />
+        <label for="email">Email</label>
+      </span>
+    </div>
+    <div class="p-field">
+      <span class="p-float-label">
+        <input
+          pPassword
+          pInputText
+          type="password"
+          id="password"
+          formControlName="password"
+          style="width: 100%"
+        />
+        <label for="password">Password</label>
+      </span>
+    </div>
+    <button
+      pButton
+      type="submit"
+      label="{{ isRegistering ? 'Register' : 'Login' }}"
+      style="width: 100%"
+    ></button>
+  </form>
+  <button
+    pButton
+    (click)="toggleRegisterMode()"
+    label="{{ isRegistering ? 'Login' : 'Register' }}"
+    style="width: 100%"
+  ></button>
+</div>

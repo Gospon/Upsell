@@ -1,5 +1,4 @@
 ﻿using Identity.Application.Commands;
-using Identity.Application.DTO;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,15 +16,15 @@ namespace Identity.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<string>> Register(UserDTO request)
+        public async Task<ActionResult<string>> Register(RegisterUserCommand command)
         {
-            return Ok(await _mediator.Send(new RegisterUserCommand(request)));
+            return Ok(await _mediator.Send(command));
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserDTO request)
+        public async Task<ActionResult<string>> Login(LoginUserCommand request)
         {
-            return Ok(await _mediator.Send(new LoginUserCommand(request)));
+            return Ok(await _mediator.Send(request));
         }
     }
 }

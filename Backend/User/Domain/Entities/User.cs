@@ -1,11 +1,14 @@
 ﻿using SharedKernel.Interfaces;
 
-namespace User.Domain.Entities;
-
-public class User : IBaseEntity<int>
+namespace User.Domain.Entities
 {
-    public int Id { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string Email { get; set; }
+    public class User : AuditableEntity
+    {
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string Email { get; set; }
+
+    }
 }

@@ -1,10 +1,11 @@
 using Identity.Application.Interfaces;
-using Identity.Infrastructure.Interfaces;
 using Identity.Infrastructure.Services;
 using Identity.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Product.Application.Interfaces;
+using Product.Persistence;
 using System.Reflection;
 using System.Text;
 using Upsell.Interceptors;
@@ -39,6 +40,18 @@ builder.Services.AddDbContext<UserDbContext>((serviceProvider, options) =>
         .AddInterceptors(interceptor);
 });
 
+builder.Services.AddScoped<IProductDbContext>(provider => provider.GetRequiredService<ProductDbContext>());
+builder.Services.AddScoped<IIdentityDbContext>(provider => provider.GetRequiredService<IdentityDbContext>());
+builder.Services.AddScoped<IUserDbContext>(provider => provider.GetRequiredService<UserDbContext>());
+
+builder.Services.AddDbContext<ProductDbContext>((serviceProvider, options) =>
+{
+    var interceptor = serviceProvider.GetService<AuditableEntitiesInterceptor>();
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Product"))
+        .AddInterceptors(interceptor);
+});
+
 builder.Services.AddAutoMapper(typeof(Identity.AssemblyReference));
 
 builder.Services.AddAutoMapper(typeof(User.AssemblyReference));
@@ -46,6 +59,8 @@ builder.Services.AddAutoMapper(typeof(User.AssemblyReference));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(Identity.AssemblyReference))));
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(User.AssemblyReference))));
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(Product.AssemblyReference))));
 
 builder.Services.AddScoped<IJwtService, JwtService>();
 

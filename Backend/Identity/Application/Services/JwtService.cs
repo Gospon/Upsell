@@ -1,5 +1,4 @@
-﻿using Identity.Application.DTO;
-using Identity.Application.Interfaces;
+﻿using Identity.Application.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,11 +13,11 @@ public class JwtService : IJwtService
     {
         _configuration = configuration;
     }
-    private void CreateToken(UserDTO user)
+    private void CreateToken(string email)
     {
         List<Claim> claims = new List<Claim>()
         {
-            new Claim(ClaimTypes.Email, user.Email)
+            new Claim(ClaimTypes.Email, email)
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
@@ -32,9 +31,9 @@ public class JwtService : IJwtService
         _jwtToken = jwt;
     }
 
-    public string GetToken(UserDTO user)
+    public string GetToken(string email)
     {
-        CreateToken(user);
+        CreateToken(email);
         return _jwtToken;
     }
 

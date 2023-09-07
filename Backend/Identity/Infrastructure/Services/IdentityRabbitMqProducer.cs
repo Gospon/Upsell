@@ -1,4 +1,4 @@
-﻿using Identity.Infrastructure.Interfaces;
+﻿using Identity.Application.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RabbitMQ.Client;

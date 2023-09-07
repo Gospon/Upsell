@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
 using User.Application.Commands;
-using User.Application.DTOs;
 using User.Application.Interfaces;
 using User.Application.Types;
 
@@ -29,7 +28,7 @@ public class UserEventProcessor : IUserEventProcessor
             {
                 case nameof(UserEventType.UserRegistered):
 
-                    var userDto = JsonSerializer.Deserialize<UserDTO>(userData);
+                    var userDto = JsonSerializer.Deserialize<Domain.Entities.User>(userData);
 
                     var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
