@@ -1,10 +1,11 @@
 ﻿using MediatR;
 using Product.Application.Interfaces;
+using Product.Domain.ValueObjects;
 using SharedKernel.Types;
 
 namespace Product.Application.Commands
 {
-    public record UpdateProductCommand(int ProductId, string Title, string Description, string Condition, string Price, int CategoryId) : IRequest<Response<string>>;
+    public record UpdateProductCommand(int ProductId, string Title, string Description, string Condition, string Price, int CategoryId, List<string> Images) : IRequest<Response<string>>;
 
     public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Response<string>>
     {
@@ -28,21 +29,29 @@ namespace Product.Application.Commands
                 };
             }
 
-            existingProduct = new Domain.Entities.Product
+            existingProduct.Title = request.Title;
+            existingProduct.Description = request.Description;
+            existingProduct.Condition = request.Condition;
+            existingProduct.Price = request.Price;
+            existingProduct.CategoryId = request.CategoryId;
+
+            existingProduct.Images = new List<Image>();
+
+            foreach (var updatedImageBase64 in request.Images)
             {
-                Title = request.Title,
-                Description = request.Description,
-                Condition = request.Condition,
-                Price = request.Price,
-                CategoryId = request.CategoryId
-            };
+                var image = new Image
+                {
+                    Base64 = updatedImageBase64,
+                };
+
+                existingProduct.Images.Add(image);
+            }
 
             await _context.SaveChangesAsync(cancellationToken);
 
             return new Response<string>
             {
                 Success = true,
-                Data = "Product updated successfully."
             };
         }
     }

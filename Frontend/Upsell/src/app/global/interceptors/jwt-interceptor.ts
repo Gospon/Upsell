@@ -7,7 +7,6 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-// Test
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
   intercept(

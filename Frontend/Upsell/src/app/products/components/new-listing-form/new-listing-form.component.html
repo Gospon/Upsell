@@ -41,7 +41,7 @@
         accept="image/*"
         mode="basic"
         [customUpload]="true"
-        (uploadHandler)="onImageUpload($event)"
+        (onSelect)="onImageSelect($event)"
       ></p-fileUpload>
       <div class="p-inputgroup">
         <span class="p-inputgroup-addon" (click)="toggleCurrency()">{{

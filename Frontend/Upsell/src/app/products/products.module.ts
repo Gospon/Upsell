@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NewListingDialog } from './containers/new-listing-dialog.component';
 import { DialogModule } from 'primeng/dialog';
 import { StoreModule } from '@ngrx/store';
 import { productsReducer } from './store/products.reducer';
@@ -20,11 +19,14 @@ import { ProductHttpService } from './services/product-http-service';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthenticationFormComponent } from './components/authentication-form/authentication-form.component';
 import { AuthenticationHttpService } from './services/authentication-http-service';
+import { NewListingDialog } from './containers/new-listing-dialog/new-listing-dialog.component';
+import { Products } from './containers/products/products.component';
 
 @NgModule({
   declarations: [
     NewListingDialog,
     NewListingFormComponent,
+    Products,
     AuthenticationFormComponent,
   ],
   imports: [
@@ -44,7 +46,7 @@ import { AuthenticationHttpService } from './services/authentication-http-servic
     HttpClientModule,
     StoreModule.forFeature('products', productsReducer),
   ],
-  exports: [NewListingDialog],
+  exports: [NewListingDialog, Products],
   providers: [ProductHttpService, AuthenticationHttpService],
 })
 export class ProductsModule {}

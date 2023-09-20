@@ -16,7 +16,10 @@ public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, Respons
     }
     public async Task<Response<IEnumerable<GetProductsQueryModel>>> Handle(GetProductsQuery request, CancellationToken cancellationToken)
     {
-        var products = await _context.Product.ToListAsync(cancellationToken);
+        var products = await _context.Product
+            .Include(p => p.Images)
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
 
         if (products.Any())
         {
@@ -28,6 +31,7 @@ public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, Respons
                 Condition = p.Condition,
                 Price = p.Price,
                 CategoryId = p.CategoryId,
+                Images = p.Images.Select(i => i.Base64).ToList()
             });
 
             return new Response<IEnumerable<GetProductsQueryModel>> { Success = true, Data = categoriesQueryModel };

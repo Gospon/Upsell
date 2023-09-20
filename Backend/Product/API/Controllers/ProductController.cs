@@ -19,7 +19,7 @@ namespace Identity.API.Controllers
         [HttpGet("product")]
         public async Task<ActionResult> GetProducts()
         {
-            return Ok(_mediator.Send(new GetProductsQuery()));
+            return Ok(await _mediator.Send(new GetProductsQuery()));
         }
 
         [HttpPost("product")]

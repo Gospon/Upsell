@@ -28,26 +28,14 @@ namespace Product.Application.Commands
                 };
             }
 
-            try
-            {
-                _context.Product.Remove(existingProduct);
+            _context.Product.Remove(existingProduct);
 
-                await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
-                return new Response<string>
-                {
-                    Success = true,
-                    Data = "Product deleted successfully."
-                };
-            }
-            catch (Exception ex)
+            return new Response<string>
             {
-                return new Response<string>
-                {
-                    Success = false,
-                    ErrorMessage = $"Error deleting the product: {ex.Message}"
-                };
-            }
+                Success = true,
+            };
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Product.Domain.ValueObjects;
 using SharedKernel.Interfaces;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Product.Domain.Entities;
 
@@ -16,6 +15,5 @@ public class Product : AuditableEntity
 
     public int CategoryId { get; set; }
 
-    [NotMapped]
-    public List<FileData> ImageUpload { get; set; }
+    public ICollection<Image> Images { get; set; }
 }

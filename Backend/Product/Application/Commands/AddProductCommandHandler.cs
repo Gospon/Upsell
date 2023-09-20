@@ -1,10 +1,11 @@
 ﻿using MediatR;
 using Product.Application.Interfaces;
+using Product.Domain.ValueObjects;
 using SharedKernel.Types;
 
 namespace Product.Application.Commands;
 
-public record AddProductCommand(string Title, string Description, string Condition, string Price, int CategoryId) : IRequest<Response<int>>;
+public record AddProductCommand(string Title, string Description, string Condition, string Price, int CategoryId, List<string> Images) : IRequest<Response<int>>;
 
 public class AddProductCommandHandler : IRequestHandler<AddProductCommand, Response<int>>
 {
@@ -22,8 +23,23 @@ public class AddProductCommandHandler : IRequestHandler<AddProductCommand, Respo
             Description = request.Description,
             Condition = request.Condition,
             Price = request.Price,
-            CategoryId = request.CategoryId
+            CategoryId = request.CategoryId,
         };
+
+        if (request.Images.Any())
+        {
+            product.Images = new List<Image>();
+
+            foreach (var imageBase64 in request.Images)
+            {
+                var image = new Image
+                {
+                    Base64 = imageBase64,
+                };
+
+                product.Images.Add(image);
+            }
+        }
 
         _context.Product.Add(product);
 

@@ -1,0 +1,12 @@
+<div *ngIf="products.length > 0" class="product-container">
+  <div *ngFor="let product of products" class="product-item">
+    <ng-container *ngIf="product.images && product.images.length > 0">
+      <img
+        class="product-image"
+        [src]="product.images[0]"
+        alt="Product Image"
+      />
+    </ng-container>
+    <p>{{ product.title }}</p>
+  </div>
+</div>

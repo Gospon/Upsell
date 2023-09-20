@@ -1,13 +1,13 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { closeAddNewListingDialog } from '../store/products.actions';
+import { Observable, tap } from 'rxjs';
+import { Category } from '../../types/category.type';
 import {
   selectAuthenticate,
   selectCategories,
   selectShowAddNewListingDialog,
-} from '../store/products.selectors';
-import { Observable, filter, tap } from 'rxjs';
-import { Category } from '../types/category.type';
+} from '../../store/products.selectors';
+import { closeAddNewListingDialog } from '../../store/products.actions';
 
 @Component({
   selector: 'new-listing-dialog',

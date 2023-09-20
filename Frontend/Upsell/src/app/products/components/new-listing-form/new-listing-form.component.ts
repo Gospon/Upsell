@@ -22,6 +22,8 @@ export class NewListingFormComponent implements OnInit {
 
   galleryImages: any[] = [];
 
+  base64Images: string[] = [];
+
   @Input()
   categories: Category[];
 
@@ -52,7 +54,7 @@ export class NewListingFormComponent implements OnInit {
         null,
         [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)],
       ],
-      imageUpload: [[]],
+      images: [[]],
     });
   }
 
@@ -66,41 +68,36 @@ export class NewListingFormComponent implements OnInit {
     }
   }
 
-  async submitListing() {
+  submitListing() {
     if (this.productForm.valid) {
-      await this.fileUpload.upload();
       this.productHttpService.addProducts(this.productForm.value).subscribe();
     } else {
-      this.productForm.markAllAsTouched();
+      // this.productForm.markAllAsTouched();
     }
   }
 
-  async onImageUpload(event: any) {
-    const uploadedImages = event.files;
-    const base64Images: string[] = [];
-
-    for (const image of uploadedImages) {
-      const base64Image = await this.blobToBase64(image);
-      base64Images.push(base64Image);
-    }
-
-    this.productForm.get('imageUpload')?.setValue(base64Images);
-  }
-
-  blobToBase64(blob: Blob): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (typeof reader.result === 'string') {
-          resolve(reader.result);
-        } else {
-          reject(new Error('Failed to convert Blob to Base64'));
-        }
-      };
-      reader.onerror = () => {
-        reject(new Error('Error reading Blob as Base64'));
-      };
-      reader.readAsDataURL(blob);
+  onImageSelect(event: any) {
+    const fileList = [...event.files];
+    const promises = fileList.map((file: any) => {
+      return new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          resolve(reader.result as string);
+        };
+        reader.onerror = (error) => {
+          reject(error);
+        };
+      });
     });
+
+    Promise.all(promises)
+      .then((base64Images) => {
+        this.productForm.get('images')?.setValue(base64Images);
+        console.log(this.productForm.get('images'));
+      })
+      .catch((error) => {
+        console.error('Error reading files:', error);
+      });
   }
 }
