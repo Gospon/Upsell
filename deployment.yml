@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: upsell-deployment
+  labels:
+    app: upsell
+spec:
+  replicas: 1 #5
+  template:
+    metadata:
+      name: upsell
+      labels:
+        app: upsell
+    spec:
+      containers:
+        - name: upsell
+          image: upsell.azurecr.io/upsell:v1.0
+          imagePullPolicy: IfNotPresent
+        - name: msuser
+          image: upsell.azurecr.io/msuser:v1.0
+          imagePullPolicy: IfNotPresent
+        - name: msidentity
+          image: upsell.azurecr.io/msidentity:v1.0
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: upsell
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: upsell-pocservice-emp
+spec:
+  selector:
+    app: upsell
+  ports:
+    - port: 80
+  type: LoadBalancer

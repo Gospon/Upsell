@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Product.Application.Interfaces;
-using Product.Persistence;
+using MSIdentity.Application.Interfaces;
+using MSIdentity.Infrastructure.Interfaces;
+using MSIdentity.Infrastructure.Services;
+using MSIdentity.Persistence;
+using MSIdentity.Persistence.Interceptors;
 using System.Reflection;
 using System.Text;
-using Upsell.Interceptors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,17 +19,21 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<AuditableEntitiesInterceptor>();
 
-builder.Services.AddScoped<IProductDbContext>(provider => provider.GetRequiredService<ProductDbContext>());
-
-builder.Services.AddDbContext<ProductDbContext>((serviceProvider, options) =>
+builder.Services.AddDbContext<IdentityDbContext>((serviceProvider, options) =>
 {
     var interceptor = serviceProvider.GetService<AuditableEntitiesInterceptor>();
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Product"))
+        builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("MSIdentity"))
         .AddInterceptors(interceptor);
 });
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(Product.ProductAssemblyReference))));
+builder.Services.AddScoped<IIdentityDbContext>(provider => provider.GetRequiredService<IdentityDbContext>());
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(MSIdentity.AssemblyReference))));
+
+builder.Services.AddScoped<IJwtService, JwtService>();
+
+builder.Services.AddSingleton<IIdentityRabbitMqProducer, IdentityRabbitMqProducer>();
 
 builder.Services.AddCors(options =>
 {

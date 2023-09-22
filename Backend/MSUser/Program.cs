@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Product.Application.Interfaces;
-using Product.Persistence;
+using MSUser.Application.Interfaces;
+using MSUser.Infrastructure.Services;
+using MSUser.Persistence;
+using MSUser.Persistence.Interceptors;
 using System.Reflection;
 using System.Text;
-using Upsell.Interceptors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,17 +18,23 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<AuditableEntitiesInterceptor>();
 
-builder.Services.AddScoped<IProductDbContext>(provider => provider.GetRequiredService<ProductDbContext>());
-
-builder.Services.AddDbContext<ProductDbContext>((serviceProvider, options) =>
+builder.Services.AddDbContext<UserDbContext>((serviceProvider, options) =>
 {
     var interceptor = serviceProvider.GetService<AuditableEntitiesInterceptor>();
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Product"))
+        builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("MSUser"))
         .AddInterceptors(interceptor);
 });
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(Product.ProductAssemblyReference))));
+builder.Services.AddScoped<IUserDbContext>(provider => provider.GetRequiredService<UserDbContext>());
+
+builder.Services.AddAutoMapper(typeof(MSUser.AssemblyReference));
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(MSUser.AssemblyReference))));
+
+builder.Services.AddHostedService<UserRabbitMqConsumer>();
+
+builder.Services.AddSingleton<IUserEventProcessor, UserEventProcessor>();
 
 builder.Services.AddCors(options =>
 {
@@ -52,6 +59,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value))
         };
     });
+
 
 var app = builder.Build();
 

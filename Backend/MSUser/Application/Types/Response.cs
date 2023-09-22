@@ -1,4 +1,4 @@
-﻿namespace SharedKernel.Types;
+﻿namespace MSUser.Application.Types;
 
 public class Response<T>
 {

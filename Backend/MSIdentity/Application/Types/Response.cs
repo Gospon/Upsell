@@ -1,4 +1,4 @@
-﻿namespace SharedKernel.Types;
+﻿namespace MSIdentity.Application.Types;
 
 public class Response<T>
 {
